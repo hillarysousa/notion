@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:900">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: white;
+    }
+
+    #timer {
+      color: #eeeeee;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'Lato', sans-serif;
+      font-size: .7em;
+      letter-spacing: 5px;
+    }
+
+    .months {
+      display: block;
+      margin: 0px auto 10px;
+      padding: 20px;
+      max-width: 540px;
+      border-radius: 5px;
+    }
+
+    .days,
+    .hours,
+    .minutes,
+    .seconds {
+      display: inline-block;
+      padding: 20px;
+      width: 100px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+
+    .months {
+      background: #000;
+    }
+
+    .days {
+      background: #111111;
+    }
+
+    .hours {
+      background: #222;
+    }
+
+    .minutes {
+      background: #444;
+    }
+
+    .seconds {
+      background: #666;
+    }
+
+    .numbers {
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      font-size: 3em;
+      text-align: center;
+    }
+
+    .white {
+      position: absolute;
+      background: #eeeeee;
+      height: 85px;
+      width: 75px;
+      left: 30%;
+      top: 2%;
+    }
+
+    .red {
+      position: absolute;
+      background: #EF2F3C;
+      left: 18%;
+      top: 9%;
+      height: 65px;
+      width: 70px;
+
+    }
+
+    .blue {
+      position: absolute;
+      background: #fff;
+      height: 80px;
+      width: 80px;
+      left: 60%;
+      top: 5%;
+    }
+
+    h1 {
+      color: #222;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="timer">
+    <h1>contador para a viagem 🛫</h1>
+
+    <div class="months">
+      <div id="months" class="numbers "> </div>meses
+    </div>
+    <div class="days">
+      <div id="days" class="numbers "> </div>dias
+    </div>
+    <div class="hours">
+      <div id="hours" class="numbers"> </div>horas
+    </div>
+    <div class="minutes">
+      <div id="minutes" class="numbers"> </div>minutos
+    </div>
+    <div class="seconds">
+      <div id="seconds" class="numbers"> </div>segundos
+    </div>
+  </div>
+
+  </div>
+
+</body>
+<script>
+  const year = new Date().getFullYear();
+  const myDate = new Date('Jan 11, 2022 00:00:00');
+
+  // countdown
+  let timer = setInterval(function () {
+
+    // get today's date
+    const today = new Date();
+    const now = new Date().getTime();
+
+    // get the difference
+    const diff = myDate - now;
+
+    function getMonthsBetween(date1,date2,roundUpFractionalMonths) {
+        //Months will be calculated between start and end dates.
+        //Make sure start date is less than end date.
+        //But remember if the difference should be negative.
+        var startDate=date1;
+        var endDate=date2;
+        var inverse=false;
+        if(date1>date2)
+        {
+            startDate=date2;
+            endDate=date1;
+            inverse=true;
+        }
+
+        //Calculate the differences between the start and end dates
+        var yearsDifference=endDate.getFullYear()-startDate.getFullYear();
+        var monthsDifference=endDate.getMonth()-startDate.getMonth();
+        var daysDifference=endDate.getDate()-startDate.getDate();
+
+        var monthCorrection=0;
+        //If roundUpFractionalMonths is true, check if an extra month needs to be added from rounding up.
+        //The difference is done by ceiling (round up), e.g. 3 months and 1 day will be 4 months.
+        if(roundUpFractionalMonths===true && daysDifference>0)
+        {
+            monthCorrection=1;
+        }
+        //If the day difference between the 2 months is negative, the last month is not a whole month.
+        else if(roundUpFractionalMonths!==true && daysDifference<0)
+        {
+            monthCorrection=-1;
+    }
+
+    return (inverse?-1:1)*(yearsDifference*12+monthsDifference+monthCorrection);
+};
+
+  function isNegative(value) {
+    if (value < 0) {
+      return 0;
+    }
+    return value;
+  }
+
+    // math
+    let months = getMonthsBetween(today, myDate, false);
+    let days = isNegative(Math.floor(diff / (1000 * 60 * 60 * 24)));
+    let hours = isNegative(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    let minutes = isNegative(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+    let seconds = isNegative(Math.floor((diff % (1000 * 60)) / 1000));
+
+    // display
+    document.getElementById("months").innerHTML = months
+    document.getElementById("days").innerHTML = days
+    document.getElementById("hours").innerHTML = hours
+    document.getElementById("minutes").innerHTML = minutes
+    document.getElementById("seconds").innerHTML = seconds
+
+
+
+  }, 1);
+</script>
+
+</html>
